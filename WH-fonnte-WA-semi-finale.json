@@ -94,20 +94,6 @@
     },
     {
       "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "={{ $json.body.senderlid }}"
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [
-        208,
-        192
-      ],
-      "id": "c9311a22-29e6-42dd-952f-70ba5fb5ad2a",
-      "name": "Simple Memory"
-    },
-    {
-      "parameters": {
         "operation": "get",
         "documentURL": "https://docs.google.com/document/d/1pS0uZBu3y4h0k6S1Lq7s_BZAJm8okKaOy0HaeKLnFpE/edit?usp=sharing"
       },
@@ -123,6 +109,23 @@
         "googleDocsOAuth2Api": {
           "id": "TEd4uSUo0kt2p8qE",
           "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        208,
+        192
+      ],
+      "id": "bccf120d-988a-4552-b217-f4f5d34fad23",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "cHJqUbbWQ2ZxYCDi",
+          "name": "Redis account"
         }
       }
     }
@@ -163,23 +166,23 @@
         ]
       ]
     },
-    "Simple Memory": {
-      "ai_memory": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "compro in Google Docs": {
       "ai_tool": [
         [
           {
             "node": "AI Agent",
             "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
             "index": 0
           }
         ]
@@ -191,7 +194,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "45f50964-804d-4f2f-9a3c-6e1ef57c6260",
+  "versionId": "22ac8029-1587-4bc5-a9c7-2b009caacaab",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "526f773943f53902e298061edb921aca5daea4cd0e419840eb0168d35c18df59"
