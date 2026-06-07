@@ -1,5 +1,5 @@
 # ajentik-ai-tugas-6
-A simple repo for tugas Agentic Ai Kelas Otomesyen by Aria Suseno.S.T.Avi
+A simple repo for tugas Agentic Ai "Kelas Otomesyen mentored by Aria Suseno.S.T.Avi"
 
 Repository ini berisi konfigurasi workflow **n8n** untuk membangun AI Agent cerdas bernama **Gita**. Agent ini berfungsi untuk membalas pesan WhatsApp secara otomatis menggunakan model LLM dari OpenRouter, berbasis memori percakapan, serta memanfaatkan Google Docs sebagai basis pengetahuan (*Ground Truth / Knowledge Base*). Integration WhatsApp dilakukan menggunakan layanan pihak ketiga dari **Fonnte**.
 
