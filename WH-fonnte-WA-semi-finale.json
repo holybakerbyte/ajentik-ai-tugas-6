@@ -1,0 +1,201 @@
+{
+  "name": "WH-fonnte-WA-semi-finale",
+  "nodes": [
+    {
+      "parameters": {
+        "multipleMethods": true,
+        "path": "37bba9c0-d3a3-4186-b962-9313e88d19a9",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d8ed28c8-2150-4237-9ee2-bf2bc759da3e",
+      "name": "Webhook",
+      "webhookId": "37bba9c0-d3a3-4186-b962-9313e88d19a9"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "You are Gita, a highly efficient AI assistant. Your primary goal is to provide concise, clear, and direct answers to the user's questions.\n\nCore Operational Directive:\nBefore responding to any incoming message, you MUST always access and consult the tool named \"compro in Google Docs\". Use the information retrieved from this tool as the primary reference and ground truth for formulating your answer.\n\nStrictly follow these operational rules:\n- Language Match: Always respond in the exact same language used by the user in their prompt.\n- Tone & Style: Be brief, accurate, and to the point. Avoid unnecessary fluff, long introductions, or conversational fillers.\n- Output Style: Match a low-temperature profile (0.3)—prioritize factual correctness, predictability, and structure over creativity. Use bullet points or short paragraphs for readability."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        16
+      ],
+      "id": "12b8f0df-e78f-4dc2-9062-9980cdcbbbfa",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "z-ai/glm-4.5-air:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        16,
+        192
+      ],
+      "id": "73b42bc0-c1d5-41c5-bd70-e2d6ff3eb27a",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "HdZhbJgW2f9XN0nO",
+          "name": "OpenRouter account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.fonnte.com/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Q5uBZGnarqeTq6WcwREN"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "target",
+              "value": "=={{ $('Webhook').first().json.body.sender }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        560,
+        16
+      ],
+      "id": "c7b66e82-eaf5-4869-8c94-3429d9e28641",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.senderlid }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        192
+      ],
+      "id": "c9311a22-29e6-42dd-952f-70ba5fb5ad2a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "https://docs.google.com/document/d/1pS0uZBu3y4h0k6S1Lq7s_BZAJm8okKaOy0HaeKLnFpE/edit?usp=sharing"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        352,
+        192
+      ],
+      "id": "712c34e0-1227-4635-9f7d-8d666d54772f",
+      "name": "compro in Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "TEd4uSUo0kt2p8qE",
+          "name": "Google Docs account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "compro in Google Docs": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "45f50964-804d-4f2f-9a3c-6e1ef57c6260",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "526f773943f53902e298061edb921aca5daea4cd0e419840eb0168d35c18df59"
+  },
+  "id": "tVOFyO4jYh3fWePg",
+  "tags": []
+}
